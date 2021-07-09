@@ -23,7 +23,7 @@ class Ip2AsnClient {
 const client = new Ip2AsnClient();
 function verifyIp(ip) {
     const ip4PartRegex = '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])';
-    const ip4Regex = new RegExp(`${ip4PartRegex}(\.){3}${ip4PartRegex}`);
+    const ip4Regex = new RegExp(`(${ip4PartRegex}\.){3}${ip4PartRegex}`);
     const ip6Regex = /((([0-9a-fA-F]){1,4})\:){7}([0-9a-fA-F]){1,4}/;
     if (!ip || (!ip.match(ip4Regex) && !ip.match(ip6Regex))) {
         throw new InvalidRequestException_1.InvalidRequestException(`Invalid ip '${ip}'`);

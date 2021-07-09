@@ -1,6 +1,13 @@
 require('./_env')
 import { log } from './logger'
-import { initServer } from './webserver'
+import { initServer, stopServer } from './webserver'
+import Graceful from 'node-graceful';
+
+Graceful.captureExceptions = true;
+Graceful.captureRejections = true;
+Graceful.on('exit', async () => {
+  await stopServer()
+});
 
 function verifyEnv() {
   ['IP_GEOLOCATION_KEY', 'PORT'].forEach((envVar) => {
