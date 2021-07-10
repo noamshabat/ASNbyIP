@@ -1,26 +1,41 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ip2region = void 0;
+exports.ip2CountryCode = void 0;
 const IpGeoApiClient = require('ip-geolocation-api-javascript-sdk');
 const GeolocationParams = require('ip-geolocation-api-javascript-sdk/GeolocationParams.js');
 const InvalidRequestException_1 = require("./exceptions/InvalidRequestException");
-class Ip2AsnClient {
+/**
+ * Class to handle calls to the ip geolocation service.
+ */
+class IpGeolocationClient {
     constructor() {
+        // initialize the sdk on class init.
         this.client = new IpGeoApiClient(process.env.IP_GEOLOCATION_KEY);
     }
-    async getIpData(ip, fields) {
+    /**
+     *
+     * @param ip the ip to get data for
+     * @param fields a list of comma separated field names based on https://ipgeolocation.io/ip-location-api.html
+     * @returns a json object with the response from the ip geolcation service.
+     */
+    getIpData(ip, fields) {
         const params = new GeolocationParams();
         params.setIPAddress(ip);
         params.setLang('en');
         params.setFields(fields);
-        return new Promise((res, rej) => {
+        return new Promise((res) => {
             this.client.getGeolocation((json) => {
                 res(json);
             }, params);
         });
     }
 }
-const client = new Ip2AsnClient();
+const client = new IpGeolocationClient();
+/**
+ * Verifies the given ip is a valid ipv4 or ipv6 string.
+ * @param ip the ip to verify
+ * @throws InvalidRequestException if ip is invalid.
+ */
 function verifyIp(ip) {
     const ip4PartRegex = '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])';
     const ip4Regex = new RegExp(`(${ip4PartRegex}\.){3}${ip4PartRegex}`);
@@ -29,9 +44,14 @@ function verifyIp(ip) {
         throw new InvalidRequestException_1.InvalidRequestException(`Invalid ip '${ip}'`);
     }
 }
-async function ip2region(ip) {
+/**
+ * Get's the country code for a given ip.
+ * @param ip the ip to get the country code for.
+ * @returns a string representing the relevant country code.
+ */
+async function ip2CountryCode(ip) {
     verifyIp(ip);
     const geoData = await client.getIpData(ip, 'country_code2');
     return geoData.country_code2;
 }
-exports.ip2region = ip2region;
+exports.ip2CountryCode = ip2CountryCode;

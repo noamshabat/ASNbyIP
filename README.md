@@ -37,7 +37,7 @@ By default, the service runs on port `5005`.
 It has 3 endpoints:
 * http://localhost:5005/test - will simply return `OK` if the service is up and functioning.
 * http://localhost:5005/shutdown - will shutdown the service and container.
-* http://localhost:5005/getip?ip=SOME_IP - will return the country code of the `ip` provided by the `SOME_IP` query parameter. Supports ipv4 and ipv6. If an invalid ip is provided, the service will return http code 400 with `Invalid ip` and specify the bad input that was received.
+* http://localhost:5005/ip2country?ip=SOME_IP - will return the country code of the `ip` provided by the `SOME_IP` query parameter. Supports ipv4 and ipv6. If an invalid ip is provided, the service will return http code 400 with `Invalid ip` and specify the bad input that was received.
 * Any unknown route will return http code 404 and the message 'unknown route'
 
 # Thanks
@@ -47,4 +47,3 @@ It has 3 endpoints:
   * https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker/
   * https://docs.docker.com/compose/gettingstarted/
 
-  
